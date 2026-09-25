@@ -17,7 +17,7 @@
 
 ## Integrantes
 
-Ana Julia Bernardo Quintans, Riane Toscano, Ricardo Branco Rios
+Ana Julia Bernardo Quintans, Riane Toscano, Ricardo Branco Rios 
 
 ## Professores Orientadores
 
