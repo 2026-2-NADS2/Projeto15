@@ -17,11 +17,11 @@
 
 ## Integrantes
 
-- [Nome do Integrante 1]
+Ana Julia Bernardo Quintans, Riane Toscano, Ricardo Branco Rios
 
 ## Professores Orientadores
 
-- [Nome do Professor 1]
+Adriano Feix Valente, Eduardo Savino Gomes, Francisco Escobar, Carlos Buesso Junior, Ronaldo Araujo Pinto
 
 ---
 
