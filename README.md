@@ -13,7 +13,7 @@
 
 ## Nome do Grupo
 
-**[NOME DO GRUPO]**
+**NOT FOUND**
 
 ## Integrantes
 
