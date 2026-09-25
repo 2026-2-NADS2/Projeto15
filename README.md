@@ -21,7 +21,7 @@ Ana Julia Bernardo Quintans, Riane Toscano, Ricardo Branco Rios
 
 ## Professores Orientadores
 
-Adriano Feix Valente, Eduardo Savino Gomes, Francisco Escobar, Carlos Buesso Junior, Ronaldo Araujo Pinto
+https://www.linkedin.com/in/adriano-valente/, Eduardo Savino Gomes, Francisco Escobar, Carlos Buesso Junior, Ronaldo Araujo Pinto
 
 ---
 
