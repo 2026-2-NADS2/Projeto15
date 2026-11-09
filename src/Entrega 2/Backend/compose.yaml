@@ -1,0 +1,40 @@
+services:
+  mysql:
+    image: mysql:8.4
+    environment:
+      MYSQL_DATABASE: kfka
+      MYSQL_USER: ${DB_USERNAME:-kfka}
+      MYSQL_PASSWORD: ${DB_PASSWORD:?Defina DB_PASSWORD no arquivo .env}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?Defina MYSQL_ROOT_PASSWORD no arquivo .env}
+    ports:
+      - "127.0.0.1:${MYSQL_PORT:-3306}:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./sql:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "--silent"]
+      interval: 10s
+      timeout: 5s
+      retries: 15
+  api:
+    build: .
+    ports:
+      - "${PORT:-8080}:8080"
+    environment:
+      PORT: 8080
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-prod}
+      DB_URL: jdbc:mysql://mysql:3306/kfka?serverTimezone=America/Sao_Paulo
+      DB_USERNAME: ${DB_USERNAME:-kfka}
+      DB_PASSWORD: ${DB_PASSWORD:?Defina DB_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET:?Defina JWT_SECRET com pelo menos 32 bytes}
+      ADMIN_EMAIL: ${ADMIN_EMAIL:-}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-}
+      CORS_ORIGINS: ${CORS_ORIGINS:?Defina CORS_ORIGINS}
+      MEDIA_MINIMA: ${MEDIA_MINIMA:-0}
+      MEDIA_MAXIMA: ${MEDIA_MAXIMA:-10}
+      FUSO_HORARIO: ${FUSO_HORARIO:-America/Sao_Paulo}
+    depends_on:
+      mysql:
+        condition: service_healthy
+volumes:
+  mysql_data:
