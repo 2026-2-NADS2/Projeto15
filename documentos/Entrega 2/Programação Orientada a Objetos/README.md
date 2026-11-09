@@ -13,6 +13,30 @@ de backend configurado e a conexão com o banco de dados MySQL funcionando.
 | ☁️ API na nuvem | https://app-production-aedab.up.railway.app/status · [Swagger](https://app-production-aedab.up.railway.app/swagger-ui/index.html) | `{"status":"UP"}` |
 | 💻 Servidor local | http://localhost:8080 (API) · http://localhost:5173 (telas) | Instruções na seção 5 |
 
+### 🔑 Acesso para teste (nuvem)
+
+Entre em https://app-production-aedab.up.railway.app com um dos logins abaixo.
+Os dados são fictícios e já estão preparados para testar o fluxo completo.
+
+| Perfil | E-mail | Senha | O que testar |
+| --- | --- | --- | --- |
+| Administrador | `admin@kfka.com` | `Kfka863b8ac9a944!` | Cadastros (Pessoas, Estrutura escolar); fila de revisão com o acompanhamento de Matemática do Lucas para revisar, devolver ou publicar; relatórios e exportação |
+| Professor(a) | `professor@kfka.com` | `Professor@2026` | Beatriz Santos, turma 5º A (Português e Matemática): ver acompanhamentos, editar o rascunho da Sofia e enviar para revisão, criar novos |
+| Responsável | `responsavel@kfka.com` | `Responsavel@2026` | Maria Oliveira, mãe do Lucas: ver o acompanhamento publicado de Português, registrar ciência e baixar o PDF |
+
+Situação inicial dos acompanhamentos (4º bimestre de 2026, aberto até 31/12/2026):
+
+| Aluno | Disciplina | Média | Status |
+| --- | --- | --- | --- |
+| Lucas Oliveira | Língua Portuguesa | 8,5 | Publicado |
+| Lucas Oliveira | Matemática | 7,0 | Enviado para revisão |
+| Sofia Lima | Língua Portuguesa | 9,0 | Rascunho |
+
+Os mesmos logins funcionam no
+[Swagger](https://app-production-aedab.up.railway.app/swagger-ui/index.html)
+(`POST /usuarios/logar` → botão **Authorize** com o token). Os dados de demonstração
+foram criados pelo script [`scripts/dados-demo.sh`](../../../src/Entrega%202/Backend/scripts/dados-demo.sh).
+
 Código-fonte:
 - Backend: [`src/Entrega 2/Backend`](../../../src/Entrega%202/Backend) — Java 17 + Spring Boot 3.5
 - Frontend: [`src/Entrega 2/Frontend`](../../../src/Entrega%202/Frontend) — React + TypeScript + Vite
