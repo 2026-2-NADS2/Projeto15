@@ -20,7 +20,7 @@ Os dados são fictícios e já estão preparados para testar o fluxo completo.
 
 | Perfil | E-mail | Senha | O que testar |
 | --- | --- | --- | --- |
-| Administrador | `admin@kfka.com` | `Kfka863b8ac9a944!` | Cadastros (Pessoas, Estrutura escolar); fila de revisão com o acompanhamento de Matemática do Lucas para revisar, devolver ou publicar; relatórios e exportação |
+| Administrador | `admin@kfka.com` | `Admin@2026` | Cadastros (Pessoas, Estrutura escolar); fila de revisão com o acompanhamento de Matemática do Lucas para revisar, devolver ou publicar; relatórios e exportação |
 | Professor(a) | `professor@kfka.com` | `Professor@2026` | Beatriz Santos, turma 5º A (Português e Matemática): ver acompanhamentos, editar o rascunho da Sofia e enviar para revisão, criar novos |
 | Responsável | `responsavel@kfka.com` | `Responsavel@2026` | Maria Oliveira, mãe do Lucas: ver o acompanhamento publicado de Português, registrar ciência e baixar o PDF |
 
