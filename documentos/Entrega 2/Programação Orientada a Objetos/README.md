@@ -9,7 +9,8 @@ de backend configurado e a conexão com o banco de dados MySQL funcionando.
 
 | Ambiente | Endereço | Situação |
 | --- | --- | --- |
-| ☁️ Nuvem (Railway) | _endereço gerado pelo Railway — preencher após o deploy_ | Telas + API + MySQL |
+| ☁️ Nuvem (Railway) | https://app-production-aedab.up.railway.app | Telas + API + MySQL em produção |
+| ☁️ API na nuvem | https://app-production-aedab.up.railway.app/status · [Swagger](https://app-production-aedab.up.railway.app/swagger-ui/index.html) | `{"status":"UP"}` |
 | 💻 Servidor local | http://localhost:8080 (API) · http://localhost:5173 (telas) | Instruções na seção 5 |
 
 Código-fonte:
@@ -317,6 +318,20 @@ Started KfkaApplication in 3.6 seconds
 - O health check do Railway consulta `/status`.
 - Telas e API ficam no **mesmo endereço**: `/` (telas), `/api/...` (API) e
   `/swagger-ui/index.html` (documentação).
+- Como o repositório pertence à organização da faculdade, o código foi enviado ao Railway
+  pela **Railway CLI** (`railway up`), a partir da pasta `src/Entrega 2`.
+
+Verificação feita em 09/11/2026 no endereço publicado:
+
+```
+GET  /status                    -> {"status":"UP"}
+GET  /  (navegador)             -> tela de login do KFKA
+GET  /swagger-ui/index.html     -> 200
+GET  /api/alunos  (sem token)   -> 401
+POST /api/usuarios/logar        -> token JWT do administrador
+POST /api/areas                 -> {"id":1,"nome":"Linguagens","ativo":true}  (gravado no MySQL do Railway)
+Log: The following 1 profile is active: "prod" · Started KfkaApplication in 5.5 seconds
+```
 
 O passo a passo completo está no README do [backend](../../../src/Entrega%202/Backend/README.md).
 

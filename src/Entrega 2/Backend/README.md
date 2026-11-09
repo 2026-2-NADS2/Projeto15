@@ -273,6 +273,10 @@ https://SEU-APP.up.railway.app
         MySQL (rede privada do Railway)
 ```
 
+> **Publicado em:** <https://app-production-aedab.up.railway.app>. Como o Railway não
+> pôde ser instalado na organização do GitHub, o deploy foi feito pela **Railway CLI**,
+> sem conectar o repositório. Veja [Deploy pela Railway CLI](#deploy-pela-railway-cli).
+
 ### 1. Criar o projeto e o MySQL
 
 1. Entre em <https://railway.com> com a conta do GitHub.
@@ -338,5 +342,38 @@ O Railway refaz o deploy sozinho.
 | `Communications link failure` | `DB_URL` errada ou serviço do banco com outro nome |
 | `Public Key Retrieval is not allowed` | Falta `&allowPublicKeyRetrieval=true` na `DB_URL` |
 | Healthcheck falhando | `PORT` diferente de `8080` ou porta do domínio diferente |
+
+### Deploy pela Railway CLI
+
+Usado quando o Railway não tem permissão para acessar o repositório no GitHub.
+Os comandos rodam dentro de `src/Entrega 2`:
+
+```bash
+npm install -g @railway/cli
+railway login                                   # autoriza no navegador
+railway init --name kfka                        # cria o projeto e liga a pasta a ele
+railway add --database mysql                    # serviço MySQL
+railway add --service app                       # serviço vazio para o sistema
+railway domain --service app --port 8080        # endereço público
+```
+
+Para aplicar os scripts SQL, abra um acesso público temporário ao banco, rode os dois
+scripts da seção 2 e feche o acesso em seguida:
+
+```bash
+railway tcp-proxy create --service MySQL --port 3306   # mostra HOST:PORTA
+railway tcp-proxy list --service MySQL                 # copie o id
+railway tcp-proxy delete ID --service MySQL
+```
+
+Configure as variáveis da seção 3 com `railway variable set NOME --stdin --service app`
+e envie o código:
+
+```bash
+railway up --service app
+```
+
+A cada mudança no código, rode `railway up --service app` novamente. Mudanças só em
+variáveis precisam de `railway redeploy --service app`.
 
 Nenhuma credencial foi adicionada ao código: tudo é configurado como variável no Railway.
