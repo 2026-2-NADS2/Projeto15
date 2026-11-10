@@ -2573,3 +2573,11 @@ button.button.primary { color: #fff !important; }
   .reference-metrics, .reference-grid { grid-template-columns: 1fr; }
   .reference-metrics { gap: 12px; }
 }
+
+/* Em telas de toque (iPhone/iPad), campos com fonte menor que 16px fazem o navegador dar zoom
+   ao tocar neles, e o zoom continua no painel depois do login. 16px evita isso. */
+@media (pointer: coarse) {
+  input,
+  select,
+  textarea { font-size: 16px !important; }
+}
