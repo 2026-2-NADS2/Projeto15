@@ -409,6 +409,28 @@ Isso cobre o fluxo principal do projeto: *Administrador configura turma, discipl
 bimestre → Professor registra e envia → Administrador revisa e publica → Responsável
 consulta, registra ciência e baixa o PDF → Administrador exporta o relatório*.
 
-Além disso, a suíte automatizada do backend (`./mvnw test`) executa **20 testes sem
-falhas**, cobrindo login, permissões por perfil, fluxo de revisão, histórico, ciência, PDF,
-CSV e a validação do schema SQL.
+Além disso, a suíte automatizada do backend (`./mvnw test`) executa **23 testes sem
+falhas**, cobrindo login, limite de tentativas, permissões por perfil, fluxo de revisão,
+histórico, ciência, PDF, CSV e a validação do schema SQL.
+
+---
+
+## 8. Testes de CRUD e segurança
+
+Antes da entrega, o mesmo pacote publicado no Railway (perfil `prod`, telas embutidas) foi
+testado em uma cópia local com os dados de demonstração: **178 verificações, 178 aprovadas**.
+
+| Grupo | O que foi verificado |
+| --- | --- |
+| CRUD | Criar, listar, buscar, editar e inativar áreas, disciplinas, turmas, tags, alunos, usuários, professores, responsáveis, matrículas e vínculos; bimestres e anos letivos; duplicidades recusadas (409) |
+| Fluxo | Rascunho → envio → revisão → edição na revisão → devolução → ajuste → reenvio → publicação; cancelamento; bloqueio de publicar rascunho e de editar publicado; histórico; ciência única; PDF; relatórios, indicadores, CSV e Excel; auditoria |
+| Autenticação | Sem token, token inválido, token adulterado, `alg=none` e token assinado com outro segredo → 401; mesma mensagem para e-mail inexistente e senha errada; usuário inativado perde o acesso imediatamente |
+| Força bruta | Após 5 senhas erradas, o e-mail fica bloqueado por 15 minutos (429), inclusive para a senha certa; outras contas continuam entrando |
+| Permissões | Professor e responsável não acessam rotas de administrador (403); responsável não cria acompanhamentos nem usuários |
+| Dados de terceiros | Responsável não vê aluno de outra família, acompanhamento não publicado nem PDF não publicado; professor não vê nem edita registros de outro professor |
+| Entrada maliciosa | Campos extras como `status` e `professorId` recusados; validação de média, nome, e-mail, senha, perfil e datas; SQL injection no filtro, no login e na ordenação; `<script>` salvo como texto e exibido sem executar; fórmulas neutralizadas no CSV; página limitada a 100 itens; erros sem stacktrace |
+| HTTP | HTTPS obrigatório (HSTS), `X-Content-Type-Options`, `X-Frame-Options`, `Cache-Control: no-store`; CORS recusa outros sites; `.env`, `application.properties` e actuator não são servidos; `TRACE` e path traversal bloqueados |
+| Telas | Todas as páginas dos três perfis abertas sem erro; cadastro de área e novo acompanhamento feitos pela tela; páginas de outro perfil mostram "sem permissão" |
+
+No endereço publicado foram repetidos os testes que não exigem login (bloqueio sem token,
+tokens falsos, cabeçalhos de segurança, CORS, arquivos sensíveis e redirecionamento para HTTPS).

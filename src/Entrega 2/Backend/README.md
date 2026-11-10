@@ -151,7 +151,7 @@ H2 descartável e segredo exclusivo de teste.
 java -jar target/kfka-1.0.0.jar
 ```
 
-A verificação final executou 20 testes sem falhas. A suíte cobre cadastro/login, BCrypt, proteção JWT, usuários inativos, propriedade
+A verificação final executou 23 testes sem falhas. A suíte cobre cadastro/login, BCrypt, proteção JWT, usuários inativos, propriedade
 por professor/responsável, matrícula e vínculo, período do bimestre, média,
 duplicidade, revisão, devolução, publicação, histórico, ciência, PDF e CSV.
 O teste de PDF também verifica texto e geração de múltiplas páginas. Um teste adicional
