@@ -2550,6 +2550,14 @@ button.button.primary { color: #fff !important; }
 .bar-fill { display: block; height: 100%; border-radius: 6px; background: linear-gradient(90deg, #9747ff, #42a8cf); }
 
 @media (max-width: 760px) {
+  /* A sidebar vira gaveta: o conteúdo não reserva espaço para ela. */
+  .app-shell,
+  .app-shell.collapsed { --sidebar-width: 0px; }
+  /* Mantém o botão de menu visível (o título fica oculto). */
+  .header .header-title { display: flex; flex: 0 0 auto; order: -1; }
+  .header .breadcrumb { display: none; }
+  .header > .brand { min-width: 0; overflow: hidden; }
+  .profile { flex-shrink: 0; font-size: 14px; }
   .reference-heading { align-items: flex-start; flex-direction: column; }
   .reference-metrics, .reference-grid { grid-template-columns: 1fr; }
   .reference-metrics { gap: 12px; }
