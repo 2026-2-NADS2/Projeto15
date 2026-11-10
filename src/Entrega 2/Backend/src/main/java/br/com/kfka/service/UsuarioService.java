@@ -3,6 +3,7 @@ package br.com.kfka.service;
 import br.com.kfka.model.*;
 import br.com.kfka.repository.*;
 import br.com.kfka.security.JwtService;
+import br.com.kfka.security.LimiteTentativasLogin;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,8 +23,12 @@ public class UsuarioService {
     private final JwtService jwt;
     private final String hashInexistente;
 
+    private final LimiteTentativasLogin limite;
+
     public UsuarioService(UsuarioRepository repository, ProfessorRepository professores,
-                          ResponsavelRepository responsaveis, PasswordEncoder encoder, JwtService jwt) {
+                          ResponsavelRepository responsaveis, PasswordEncoder encoder, JwtService jwt,
+                          LimiteTentativasLogin limite) {
+        this.limite = limite;
         this.repository = repository;
         this.professores = professores;
         this.responsaveis = responsaveis;
@@ -64,11 +69,19 @@ public class UsuarioService {
 
     @Transactional(readOnly=true)
     public UsuarioLoginResposta logar(UsuarioLogin dados) {
-        Usuario usuario = repository.findByEmail(dados.email().trim().toLowerCase(Locale.ROOT)).orElse(null);
+        String email = dados.email().trim().toLowerCase(Locale.ROOT);
+        long minutos = limite.minutosBloqueado(email);
+        if (minutos > 0)
+            throw new ResponseStatusException(HttpStatus.TOO_MANY_REQUESTS,
+                "Muitas tentativas de login. Tente novamente em " + minutos + (minutos == 1 ? " minuto." : " minutos."));
+        Usuario usuario = repository.findByEmail(email).orElse(null);
         boolean senhaValida = dados.senha().getBytes(StandardCharsets.UTF_8).length <= 72
             && encoder.matches(dados.senha(), usuario == null ? hashInexistente : usuario.getSenha());
-        if (usuario == null || !senhaValida || !usuario.getAtivo())
+        if (usuario == null || !senhaValida || !usuario.getAtivo()) {
+            limite.registrarFalha(email);
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "E-mail ou senha inválidos");
+        }
+        limite.registrarSucesso(email);
         return new UsuarioLoginResposta(usuario.getId(), usuario.getNome(), usuario.getEmail(), usuario.getPerfil(), jwt.generateToken(usuario));
     }
 }
