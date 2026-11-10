@@ -7,6 +7,7 @@ public record UsuarioCadastro(
     @NotBlank @Size(max=150) String nome,
     @NotBlank @Email(message="E-mail inválido") @Size(max=254) String email,
     @NotBlank @Size(min=8, max=72, message="Senha deve ter entre 8 e 72 caracteres")
+    @Pattern(regexp="^(?=.*\\p{L})(?=.*\\d).*$", message="Senha deve ter pelo menos uma letra e um número")
     @JsonProperty(access=JsonProperty.Access.WRITE_ONLY) String senha,
     @NotNull PerfilUsuario perfil,
     boolean ativo

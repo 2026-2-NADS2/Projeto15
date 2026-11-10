@@ -409,16 +409,18 @@ Isso cobre o fluxo principal do projeto: *Administrador configura turma, discipl
 bimestre → Professor registra e envia → Administrador revisa e publica → Responsável
 consulta, registra ciência e baixa o PDF → Administrador exporta o relatório*.
 
-Além disso, a suíte automatizada do backend (`./mvnw test`) executa **23 testes sem
+Além disso, a suíte automatizada do backend (`./mvnw test`) executa **26 testes sem
 falhas**, cobrindo login, limite de tentativas, permissões por perfil, fluxo de revisão,
-histórico, ciência, PDF, CSV e a validação do schema SQL.
+regras de matrícula, vínculo, bimestre e senha, histórico, ciência, PDF, CSV e a validação
+do schema SQL. O frontend tem 6 testes automatizados (`pnpm test`), também sem falhas.
 
 ---
 
 ## 8. Testes de CRUD e segurança
 
 Antes da entrega, o mesmo pacote publicado no Railway (perfil `prod`, telas embutidas) foi
-testado em uma cópia local com os dados de demonstração: **178 verificações, 178 aprovadas**.
+testado em uma cópia local com os dados de demonstração: **209 verificações, 209 aprovadas**
+(178 no roteiro principal e 31 no roteiro complementar).
 
 | Grupo | O que foi verificado |
 | --- | --- |
@@ -430,7 +432,22 @@ testado em uma cópia local com os dados de demonstração: **178 verificações
 | Dados de terceiros | Responsável não vê aluno de outra família, acompanhamento não publicado nem PDF não publicado; professor não vê nem edita registros de outro professor |
 | Entrada maliciosa | Campos extras como `status` e `professorId` recusados; validação de média, nome, e-mail, senha, perfil e datas; SQL injection no filtro, no login e na ordenação; `<script>` salvo como texto e exibido sem executar; fórmulas neutralizadas no CSV; página limitada a 100 itens; erros sem stacktrace |
 | HTTP | HTTPS obrigatório (HSTS), `X-Content-Type-Options`, `X-Frame-Options`, `Cache-Control: no-store`; CORS recusa outros sites; `.env`, `application.properties` e actuator não são servidos; `TRACE` e path traversal bloqueados |
-| Telas | Todas as páginas dos três perfis abertas sem erro; cadastro de área e novo acompanhamento feitos pela tela; páginas de outro perfil mostram "sem permissão" |
+| Regras de negócio | Lançamento fora do período do bimestre (409); aluno sem matrícula na turma (400); aluno em duas turmas no mesmo ano (409); dois professores na mesma disciplina e turma (409); bimestres com datas sobrepostas (409); senha sem letra ou sem número (400) |
+| Recuperação de senha | Pedido com resposta igual para e-mail existente ou não; código não exposto em produção; nova senha fraca recusada; redefinição; login com a nova senha; senha antiga e código já usado deixam de valer |
+| Vínculo da família | Ao vincular um segundo filho, o responsável passa a vê-lo; ao desvincular, deixa de ver e não consegue mais abrir o cadastro (404) |
+| Telas | Todas as páginas dos três perfis abertas sem erro; cadastro de área e novo acompanhamento feitos pela tela; páginas de outro perfil mostram "sem permissão"; bimestre sem publicações mostra "Ainda não há publicações neste período"; depois de sair, o botão Voltar do navegador leva ao login, sem mostrar dados |
+| Celular | Todas as telas do administrador (21) e do responsável (6) em 390 px de largura, sem rolagem lateral; menu vira gaveta |
+| Dependências | `pnpm audit` sem vulnerabilidades conhecidas, depois de atualizar `axios`, `follow-redirects`, `vite`, `source-map-js` e `vitest` |
 
 No endereço publicado foram repetidos os testes que não exigem login (bloqueio sem token,
-tokens falsos, cabeçalhos de segurança, CORS, arquivos sensíveis e redirecionamento para HTTPS).
+tokens falsos, cabeçalhos de segurança, CORS, arquivos sensíveis, redirecionamento para HTTPS
+e a nova regra de senha).
+
+### Comparação com o plano de testes de referência
+
+O roteiro foi conferido contra um plano de 64 casos usado como referência. Todos os casos
+que se aplicam ao KFKA foram executados e aprovados. Não se aplicam: observação obrigatória
+na devolução e número de matrícula do aluno, que não fazem parte deste sistema, e a expiração
+do token, que exige esperar as 2 horas de validade. A exibição da ciência para professor e
+administrador não existe nas telas: a ciência fica registrada no banco e aparece na contagem
+da view de relatórios (`total_ciencias`).

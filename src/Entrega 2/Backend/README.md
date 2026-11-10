@@ -151,7 +151,7 @@ H2 descartável e segredo exclusivo de teste.
 java -jar target/kfka-1.0.0.jar
 ```
 
-A verificação final executou 23 testes sem falhas. A suíte cobre cadastro/login, BCrypt, proteção JWT, usuários inativos, propriedade
+A verificação final executou 26 testes sem falhas. A suíte cobre cadastro/login, BCrypt, proteção JWT, usuários inativos, propriedade
 por professor/responsável, matrícula e vínculo, período do bimestre, média,
 duplicidade, revisão, devolução, publicação, histórico, ciência, PDF e CSV.
 O teste de PDF também verifica texto e geração de múltiplas páginas. Um teste adicional
@@ -238,6 +238,14 @@ Responsáveis veem apenas PUBLICADO de seus alunos, inclusive em filtros,
 consultas diretas e PDF. Cada responsável registra ciência uma única vez por
 acompanhamento. Dois responsáveis do mesmo aluno podem registrar suas próprias
 ciências. Todas as mudanças do acompanhamento preservam auditoria.
+
+Regras de cadastro (Entrega 2):
+
+- Um aluno só pode ter **uma matrícula ativa por ano letivo** (409 ao matricular em outra turma do mesmo ano).
+- Cada disciplina tem **um professor ativo por turma** (409 ao vincular um segundo professor).
+- Os **períodos dos bimestres não se sobrepõem** (409 ao criar ou ajustar datas que cruzam outro bimestre).
+- Senhas têm de 8 a 72 caracteres, com **pelo menos uma letra e um número**, no cadastro e na redefinição.
+- Depois de **5 senhas erradas** seguidas, o e-mail fica bloqueado por 15 minutos (429).
 
 Veja [GUIA_API.md](docs/GUIA_API.md) para os corpos de requisição e um roteiro completo.
 

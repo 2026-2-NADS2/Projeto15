@@ -11,4 +11,6 @@ public interface VinculoTurmaRepository extends JpaRepository<VinculoTurma, Long
     boolean existsByProfessorIdAndDisciplinaIdAndTurmaId(Long professorId, Long disciplinaId, Long turmaId);
     boolean existsByProfessorIdAndDisciplinaIdAndTurmaIdAndIdNot(Long professorId, Long disciplinaId, Long turmaId, Long id);
     boolean existsByProfessorUsuarioIdAndDisciplinaIdAndTurmaIdAndAtivoTrue(Long usuarioId, Long disciplinaId, Long turmaId);
+    /** Vínculo ativo de outro professor com a mesma disciplina na mesma turma. */
+    boolean existsByDisciplinaIdAndTurmaIdAndProfessorIdNotAndAtivoTrue(Long disciplinaId, Long turmaId, Long professorId);
 }

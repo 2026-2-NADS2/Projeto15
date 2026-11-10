@@ -153,7 +153,7 @@ class FluxoEscolarTest {
     }
 
     @Test void professorSemVinculoOuComVinculoInativoNaoCria() throws Exception {
-        long outraTurma = cadastrar("/turmas", Map.of("nome", "Outra", "serie", "5º", "anoLetivo", 2026, "ativo", true));
+        long outraTurma = cadastrar("/turmas", Map.of("nome", "Outra", "serie", "5º", "anoLetivo", 2027, "ativo", true));
         cadastrar("/matriculas", Map.of("alunoId", alunoId, "turmaId", outraTurma, "ativo", true));
         resposta(post("/acompanhamentos"), acompanhamento(alunoId, outraTurma, disciplinaId, bimestreId), professor, 403);
         resposta(delete("/vinculos/" + vinculoId), null, admin, 204);
@@ -178,8 +178,8 @@ class FluxoEscolarTest {
 
     @Test void periodoFechadoOuFuturoImpedeCriacaoEdicaoEEnvio() throws Exception {
         LocalDateTime agora = LocalDateTime.now(clock);
-        long fechado = cadastrar("/bimestres", bimestre(2, agora.minusDays(2), agora.minusDays(1)));
-        long futuro = cadastrar("/bimestres", bimestre(3, agora.plusDays(1), agora.plusDays(2)));
+        long fechado = cadastrar("/bimestres", bimestre(2, agora.minusDays(4), agora.minusDays(3)));
+        long futuro = cadastrar("/bimestres", bimestre(3, agora.plusDays(2), agora.plusDays(3)));
         for (long b : List.of(fechado, futuro)) resposta(post("/acompanhamentos"), acompanhamento(alunoId, turmaId, disciplinaId, b), professor, 409);
         long id = criar();
         resposta(put("/bimestres/" + bimestreId), bimestre(1, agora.minusDays(2), agora.minusDays(1)), admin, 200);
@@ -194,8 +194,39 @@ class FluxoEscolarTest {
         resposta(post("/acompanhamentos"), dados, professor, 400);
         dados.put("media", -1); resposta(post("/acompanhamentos"), dados, professor, 400);
         dados.put("media", 8.555); resposta(post("/acompanhamentos"), dados, professor, 400);
-        long outroAno = cadastrar("/bimestres", Map.of("numero", 1, "anoLetivo", 2025, "dataHoraAbertura", LocalDateTime.now(clock).minusDays(1).toString(), "dataHoraEncerramento", LocalDateTime.now(clock).plusDays(1).toString()));
+        long outroAno = cadastrar("/bimestres", Map.of("numero", 1, "anoLetivo", 2025, "dataHoraAbertura", LocalDateTime.of(2025, 3, 1, 0, 0).toString(), "dataHoraEncerramento", LocalDateTime.of(2025, 4, 30, 23, 59).toString()));
         resposta(post("/acompanhamentos"), acompanhamento(alunoId, turmaId, disciplinaId, outroAno), professor, 400);
+    }
+
+    @Test void alunoEmUmaTurmaPorAnoEUmProfessorPorDisciplinaNaTurma() throws Exception {
+        long outraTurma2026 = cadastrar("/turmas", Map.of("nome", "5º B", "serie", "5º", "anoLetivo", 2026, "ativo", true));
+        long turma2027 = cadastrar("/turmas", Map.of("nome", "6º A", "serie", "6º", "anoLetivo", 2027, "ativo", true));
+        resposta(post("/matriculas"), Map.of("alunoId", alunoId, "turmaId", outraTurma2026, "ativo", true), admin, 409);
+        cadastrar("/matriculas", Map.of("alunoId", alunoId, "turmaId", turma2027, "ativo", true));
+        resposta(delete("/matriculas/" + matriculaId), null, admin, 204);
+        cadastrar("/matriculas", Map.of("alunoId", alunoId, "turmaId", outraTurma2026, "ativo", true));
+
+        long u = cadastrar("/usuarios", usuario("Segundo professor", "segundo.prof@teste.local", "PROFESSOR"));
+        long p = cadastrar("/professores", Map.of("usuarioId", u));
+        resposta(post("/vinculos"), Map.of("professorId", p, "disciplinaId", disciplinaId, "turmaId", turmaId, "ativo", true), admin, 409);
+        resposta(delete("/vinculos/" + vinculoId), null, admin, 204);
+        cadastrar("/vinculos", Map.of("professorId", p, "disciplinaId", disciplinaId, "turmaId", turmaId, "ativo", true));
+        resposta(put("/vinculos/" + vinculoId), Map.of("professorId", professorId, "disciplinaId", disciplinaId, "turmaId", turmaId, "ativo", true), admin, 409);
+    }
+
+    @Test void bimestresNaoSeSobrepoem() throws Exception {
+        LocalDateTime agora = LocalDateTime.now(clock);
+        resposta(post("/bimestres"), bimestre(2, agora, agora.plusDays(5)), admin, 409);
+        long seguinte = cadastrar("/bimestres", bimestre(2, agora.plusDays(2), agora.plusDays(5)));
+        resposta(put("/bimestres/" + seguinte), bimestre(2, agora, agora.plusDays(5)), admin, 409);
+        resposta(put("/bimestres/" + bimestreId), bimestre(1, agora.minusDays(1), agora.plusDays(3)), admin, 409);
+        resposta(put("/bimestres/" + bimestreId), bimestre(1, agora.minusDays(3), agora.plusDays(1)), admin, 200);
+    }
+
+    @Test void senhaPrecisaDeLetraENumero() throws Exception {
+        for (String fraca : List.of("12345678", "abcdefgh", "SóLetras!"))
+            resposta(post("/usuarios"), Map.of("nome", "Fraca", "email", "fraca@teste.local", "senha", fraca, "perfil", "PROFESSOR", "ativo", true), admin, 400);
+        cadastrar("/usuarios", Map.of("nome", "Forte", "email", "forte@teste.local", "senha", "Letra1234", "perfil", "PROFESSOR", "ativo", true));
     }
 
     @Test void naoPermiteDuplicadosNemBimestreInvalido() throws Exception {

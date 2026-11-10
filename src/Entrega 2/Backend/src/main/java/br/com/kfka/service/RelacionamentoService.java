@@ -122,6 +122,8 @@ public class RelacionamentoService {
         if (dados.ativo() && (!aluno.getAtivo() || !turma.getAtivo())) throw erro(HttpStatus.BAD_REQUEST, "Aluno e turma devem estar ativos");
         boolean duplicado = id == null ? matriculaRepository.existsByAlunoIdAndTurmaId(dados.alunoId(), dados.turmaId()) : matriculaRepository.existsByAlunoIdAndTurmaIdAndIdNot(dados.alunoId(), dados.turmaId(), id);
         if (duplicado) throw erro(HttpStatus.CONFLICT, "Matrícula já cadastrada");
+        if (dados.ativo() && matriculaRepository.existsByAlunoIdAndTurmaAnoLetivoAndTurmaIdNotAndAtivoTrue(aluno.getId(), turma.getAnoLetivo(), turma.getId()))
+            throw erro(HttpStatus.CONFLICT, "Aluno já está matriculado em outra turma neste ano letivo");
         registro.setAluno(aluno);
         registro.setTurma(turma);
         registro.setAtivo(dados.ativo());
@@ -150,6 +152,8 @@ public class RelacionamentoService {
         if (dados.ativo() && (!professor.getUsuario().getAtivo() || !disciplina.getAtivo() || !turma.getAtivo())) throw erro(HttpStatus.BAD_REQUEST, "Professor, disciplina e turma devem estar ativos");
         boolean duplicado = id == null ? vinculoTurmaRepository.existsByProfessorIdAndDisciplinaIdAndTurmaId(dados.professorId(), dados.disciplinaId(), dados.turmaId()) : vinculoTurmaRepository.existsByProfessorIdAndDisciplinaIdAndTurmaIdAndIdNot(dados.professorId(), dados.disciplinaId(), dados.turmaId(), id);
         if (duplicado) throw erro(HttpStatus.CONFLICT, "Vínculo acadêmico já cadastrado");
+        if (dados.ativo() && vinculoTurmaRepository.existsByDisciplinaIdAndTurmaIdAndProfessorIdNotAndAtivoTrue(disciplina.getId(), turma.getId(), professor.getId()))
+            throw erro(HttpStatus.CONFLICT, "Esta disciplina já tem professor nesta turma");
         registro.setProfessor(professor);
         registro.setDisciplina(disciplina);
         registro.setTurma(turma);

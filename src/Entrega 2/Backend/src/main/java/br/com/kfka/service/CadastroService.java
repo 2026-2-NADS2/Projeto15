@@ -127,6 +127,10 @@ public class CadastroService {
             ? bimestreRepository.existsByAnoLetivoAndNumero(dados.getAnoLetivo(), dados.getNumero())
             : bimestreRepository.existsByAnoLetivoAndNumeroAndIdNot(dados.getAnoLetivo(), dados.getNumero(), id);
         if (duplicado) throw new ResponseStatusException(HttpStatus.CONFLICT, "Bimestre já cadastrado neste ano letivo");
+        boolean sobrepoe = id == null
+            ? bimestreRepository.existsByDataHoraAberturaLessThanAndDataHoraEncerramentoGreaterThan(dados.getDataHoraEncerramento(), dados.getDataHoraAbertura())
+            : bimestreRepository.existsByDataHoraAberturaLessThanAndDataHoraEncerramentoGreaterThanAndIdNot(dados.getDataHoraEncerramento(), dados.getDataHoraAbertura(), id);
+        if (sobrepoe) throw new ResponseStatusException(HttpStatus.CONFLICT, "O período se sobrepõe a outro bimestre");
         if (id != null && !registro.getNumero().equals(dados.getNumero()))
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Número do bimestre não pode ser alterado. Cadastre outro bimestre");
         registro.setNumero(dados.getNumero());

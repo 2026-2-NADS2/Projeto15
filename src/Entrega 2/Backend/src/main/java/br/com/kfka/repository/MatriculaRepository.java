@@ -11,4 +11,6 @@ public interface MatriculaRepository extends JpaRepository<Matricula, Long>, Jpa
     boolean existsByAlunoIdAndTurmaId(Long alunoId, Long turmaId);
     boolean existsByAlunoIdAndTurmaIdAndIdNot(Long alunoId, Long turmaId, Long id);
     boolean existsByAlunoIdAndTurmaIdAndAtivoTrue(Long alunoId, Long turmaId);
+    /** Matrícula ativa do aluno em outra turma do mesmo ano letivo. */
+    boolean existsByAlunoIdAndTurmaAnoLetivoAndTurmaIdNotAndAtivoTrue(Long alunoId, Integer anoLetivo, Long turmaId);
 }
