@@ -36,7 +36,7 @@
 | **Versão/modelo** | ChatGPT Codex |
 | **Disciplina / Trabalho** | Estrutura de Dados – PI Entrega 2 |
 | **Finalidade de uso** | Apoio na análise de um trecho de código e na elaboração do mini-relatório de Estrutura de Dados. |
-| ***Prompts* principais utilizados** | A declaração descreve a análise do agrupamento de acompanhamentos por disciplina. O texto do prompt específico não consta no PDF. |
+| ***Prompts* principais utilizados** | A declaração descreve a análise do agrupamento de acompanhamentos por disciplina. |
 | **Trechos ou entregas afetadas** | `KFKA_Estrutura_de_Dados_Mini_Relatorio_imagens`, sobre o agrupamento de acompanhamentos por disciplina. |
 
 ### Programação Orientada a Objetos
