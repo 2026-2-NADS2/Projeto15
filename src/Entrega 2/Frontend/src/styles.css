@@ -2558,6 +2558,17 @@ button.button.primary { color: #fff !important; }
   .header .breadcrumb { display: none; }
   .header > .brand { min-width: 0; overflow: hidden; }
   .profile { flex-shrink: 0; font-size: 14px; }
+  /* No celular 100vh inclui a área atrás da barra do navegador e esconde o "Sair da conta";
+     dvh usa só a altura visível. A gaveta rola sozinha e o botão fica acima da área segura. */
+  .sidebar,
+  .collapsed .sidebar {
+    height: calc(100dvh - 85px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: calc(24px + env(safe-area-inset-bottom));
+  }
+  .sidebar-bottom { flex-shrink: 0; }
   .reference-heading { align-items: flex-start; flex-direction: column; }
   .reference-metrics, .reference-grid { grid-template-columns: 1fr; }
   .reference-metrics { gap: 12px; }
