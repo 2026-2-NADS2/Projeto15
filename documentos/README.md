@@ -8,7 +8,7 @@
 
 ### Banco de Dados
 
-| **Aluno(s) Responsável(veis)** | Ana Julia Bernardo Quintans, Riane Toscano e Ricardo Branco Rios (declaração do grupo) |
+| **Aluno(s) Responsável(veis)** | Ana Julia Bernardo Quintans e Riane Toscano |
 | :--- | :--- |
 | **Ferramenta utilizada** | Claude (Anthropic) |
 | **Versão/modelo** | Claude Opus 5.5 |
@@ -19,7 +19,7 @@
 
 ### Design de Interface Digital
 
-| **Aluno(s) Responsável(veis)** | Ana Julia Bernardo Quintans, Riane Toscano e Ricardo Branco Rios (declaração do grupo) |
+| **Aluno(s) Responsável(veis)** | Ricardo Branco Rios |
 | :--- | :--- |
 | **Ferramenta utilizada** | ChatGPT Codex (OpenAI) e Claude (Anthropic) |
 | **Versão/modelo** | ChatGPT Codex e Claude Opus 5.5 |
@@ -30,7 +30,7 @@
 
 ### Estrutura de Dados
 
-| **Aluno(s) Responsável(veis)** | Ana Julia Bernardo Quintans, Riane Toscano e Ricardo Branco Rios (declaração do grupo) |
+| **Aluno(s) Responsável(veis)** | Riane Toscano e Ana Julia Bernardo Quintans |
 | :--- | :--- |
 | **Ferramenta utilizada** | ChatGPT Codex (OpenAI) |
 | **Versão/modelo** | ChatGPT Codex |
@@ -41,7 +41,7 @@
 
 ### Programação Orientada a Objetos
 
-| **Aluno(s) Responsável(veis)** | Ana Julia Bernardo Quintans, Riane Toscano e Ricardo Branco Rios (declaração do grupo) |
+| **Aluno(s) Responsável(veis)** |  Riane Toscano e Ricardo Branco Rios  |
 | :--- | :--- |
 | **Ferramenta utilizada** | Claude (Anthropic) |
 | **Versão/modelo** | Claude Opus 5.5 |
